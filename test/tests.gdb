@@ -27,43 +27,20 @@ echo ======================================================\n
 echo Running all tests..."\n\n
 
 # Add tests below
-test "PINA: 0x00 =>PORTB: 0x01”
-set state = Release_On
+test "PINA: 0x00 =>PORTB: 0x07”
+set state = wait
 setPINA 0x00
 continue 2
-expectPORTB 0x02
+expectPORTB 0x07
 checkResult
 
-test "PINA: 0x00,0x01 =>PORTB: 0x02”
-set state = Release_On
-setPINA 0x00
-continue 2
-setPINA 0x01
-expectPORTB 0x02
-checkResult
-
-test "PINA: 0x00,0x01,0x00 =>PORTB: 0x02”
-set state = Release_On
-setPINA 0x00
-continue 5
-setPINA 0x01
-continue 5
-setPINA 0x00
-expectPORTB 0x02
-checkResult
-
-test "PINA: 0x00,0x01,0x00,0x00 =>PORTB: 0x02”
-set state = Release_On
+test "PINA: 0x00, 0x01 =>PORTB: 0x07”
+set state = wait
 setPINA 0x00
 continue 2
 setPINA 0x01
 continue 2
-setPINA 0x00
-continue 2
-setPINA 0x00
-continue 2
-setPINA 0x01
-expectPORTB 0x01
+expectPORTB 0x08
 checkResult
 
 # Report on how many tests passed/tests ran

@@ -13,82 +13,146 @@
 #endif
 //#define A0 PINA & 0x01
 
-enum states {Release_On, Press_Off, Release_Off, Press_On} state;
+enum states {wait, press0, press1, both} state;
 
 void tick() {
+	unsigned char tmpB = 0x07;
 	switch(state) {
-		case Release_On:
-		{		
-			if ((~PINA & 0x01) == 0x00) {
-				state = Release_On;
-				PORTB = 0x01;
-				break;
-			}
-			else if ((~PINA & 0x01) == 0x01) {
-				state = Press_Off;
-				PORTB = 0x02;
-                                break;
-			}
-		}
-		case Press_Off:
+		
+		case wait:
 		{
-			if ((~PINA & 0x01) == 0x01) {
-                                state = Press_Off;
-				PORTB = 0x02;
+			if ((~PINA & 0x03) == 0x00) {
+				PORTB = tmpB;
+                                state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x00) {
-                                state = Release_Off;
-				PORTB = 0x02;
+			else if ((~PINA & 0x03) == 0x03) {
+                                state = both;
+                                tmpB = 0;
+                                PORTB = tmpB;
+                                break;
+                        }
+                        else if ((~PINA & 0x03) == 0x01) {
+                                state = press0;
+				if (tmpB < 9) {
+					tmpB = tmpB + 1;
+				}
+                                PORTB = tmpB;
+                                break;
+                        }
+			else if ((~PINA & 0x03) == 0x02) {
+                                state = press1;
+                                if (tmpB > 0) {
+                                        tmpB = tmpB - 1;
+                                }
+                                PORTB = tmpB;
                                 break;
                         }
 		}
-		case Release_Off:
+		case press0:
+		{		
+			if ((~PINA & 0x03) == 0x00) {
+				PORTB = tmpB;
+                                state = wait;
+                                break;
+                        }
+                        else if ((~PINA & 0x03) == 0x03) {
+                                state = both;
+                                tmpB = 0;
+                                PORTB = tmpB;
+                                break;
+                        }
+                        else if ((~PINA & 0x03) == 0x01) {
+				PORTB = tmpB;
+                                state = press0;
+                                break;
+                        }
+                        else if ((~PINA & 0x03) == 0x02) {
+                                state = press1;
+                                if (tmpB > 0) {
+                                        tmpB = tmpB - 1;
+                                }
+                                PORTB = tmpB;
+                                break;
+                        }	
+		}
+		case press1:
 		{	
-			if ((~PINA & 0x01) == 0x00) {
-                                state = Release_Off;
-				PORTB = 0x02;
+		        if ((~PINA & 0x03) == 0x00) {
+                                PORTB = tmpB;
+				state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x01) {
-                                state = Press_On;
-				PORTB = 0x01;
+                        else if ((~PINA & 0x03) == 0x03) {
+                                state = both;
+                                tmpB = 0;
+                                PORTB = tmpB;
+                                break;
+                        }
+                        else if ((~PINA & 0x03) == 0x01) {
+                                state = press0;
+                                if (tmpB < 9) {
+                                        tmpB = tmpB + 1;
+                                }
+                                PORTB = tmpB;
+                                break;
+                        }
+          		else if ((~PINA & 0x03) == 0x02) {
+				PORTB = tmpB;
+                                state = press1;
                                 break;
                         }
 		}
-		case Press_On:
+		case both:
 		{	
-			if ((~PINA & 0x01) == 0x01) {
-                                state = Press_On;
-				PORTB = 0x01;
+		        if ((~PINA & 0x03) == 0x00) {
+				PORTB = tmpB;
+                                state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x00) {
-                                state = Release_On;
-				PORTB = 0x01;	
+                        else if ((~PINA & 0x03) == 0x03) {
+				PORTB = tmpB;
+                                state = both;
                                 break;
                         }
-		}
+                        else if ((~PINA & 0x03) == 0x01) {
+                                state = press0;
+                                if (tmpB < 9) {
+                                        tmpB = tmpB + 1;
+                                }
+                                PORTB = tmpB;
+                                break;
+                        }
+          		else if ((~PINA & 0x03) == 0x02) {
+                                state = press1;
+                                if (tmpB > 0) {
+                                        tmpB = tmpB - 1;
+                                }
+                                PORTB = tmpB;
+                                break;
+                        }
+		}	
 		default:
 		{
-			state = Release_On;
+			state = press0;
 			break;
 		}
 	}
 	switch(state) {
-                case Release_On:
+		case wait:
 		{
                         break;
 		}
-                case Press_Off:
+                case press0:
 		{
                         break;
 		}
-                case Release_Off:
+                
+                case press1:
 		{
                         break;
 		}
-                case Press_On:
+                case both:
 		{
                         break;
 		}
@@ -98,7 +162,7 @@ void tick() {
 int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0xFF; PORTB = 0x00;
-	state = Release_On;
+	state = wait;
 //	unsigned char A0 = 0x00;
 	while(1) {
 //		A0 = PINA & 0x01;
