@@ -25,10 +25,28 @@ void tick() {
 			}
 			break;
 		case Press_Off:
+			if (A0) {
+                                LED_State = Press_Off;
+                        }
+                        else if (!A0) {
+                                LED_State = Release_Off;
+                        }
 			break;
 		case Release_Off:
+			if (!A0) {
+                                LED_State = Release_Off;
+                        }
+                        else if (A0) {
+                                LED_State = Press_On;
+                        }
 			break;
-		case Press_Off:
+		case Press_On:
+			if (A0) {
+                                LED_State = Press_On;
+                        }
+                        else if (!A0) {
+                                LED_State = Release_On;
+                        }
 			break;
 		default:
 			LED_State = Release_On;
@@ -36,28 +54,27 @@ void tick() {
 	}
 	switch(LED_State) {
                 case Release_On:
+			PORTB = 0x01;
                         break;
                 case Press_Off:
+			PORtB = 0x02;
                         break;
                 case Release_Off:
+			PORTB = 0x02;
                         break;
-                case Press_Off:
+                case Press_On:
+			PORTB = 0x01;
                         break;
-                default:
-                        break
         }
 }
 
 int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0xFF; PORTB = 0x00;
-	DDRC = 0xFF; PORTC = 0x00;
-	unsigned int tmpC = 0;
-	unsigned char tmpA = 0x00;
-	unsigned char tmpB = 0x00;
-	unsigned char curA = 0x00;
+	unsigned char A0 = 0x00;
 	while(1) {
-
+		A0 = PINA & 0x01;
+		tick();
 	}
     return 1;
 }
