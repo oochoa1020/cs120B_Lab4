@@ -35,7 +35,7 @@ checkResult
 
 test "PINA: 0x00,0x01 =>PORTB: 0x02”
 setPINA 0x01
-continue 5
+continue 2
 setPINA 0x01
 expectPORTB 0x02
 checkResult
@@ -57,6 +57,8 @@ continue 2
 setPINA 0x00
 continue 2
 setPINA 0x00
+continue 2
+setPINA 0x01
 expectPORTB 0x02
 checkResult
 

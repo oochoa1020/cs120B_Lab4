@@ -13,7 +13,7 @@
 #endif
 //#define A0 PINA & 0x01
 
-enum LED_States {Press_On, Release_On, Press_Off, Release_Off} LED_State;
+enum LED_States {Release_On, Press_Off, Release_Off, Press_On} LED_State;
 
 void tick() {
 	unsigned char A0 = 0x00;
