@@ -13,70 +13,92 @@
 #endif
 //#define A0 PINA & 0x01
 
-enum LED_States {Release_On, Press_Off, Release_Off, Press_On} LED_State;
+enum states {Release_On, Press_Off, Release_Off, Press_On} state;
 
 void tick() {
-	unsigned char A0 = 0x00;
-	switch(LED_State) {
+	switch(state) {
 		case Release_On:
-			A0 = PINA & 0x01;
-			if (!A0) {
-				LED_State = Release_On;
+		{		
+			if ((~PINA & 0x01) == 0x00) {
+				state = Release_On;
+				PORTB = 0x01;
+				break;
 			}
-			else if (A0) {
-				LED_State = Press_Off;
+			else if ((~PINA & 0x01) == 0x01) {
+				state = Press_Off;
+				PORTB = 0x02;
+                                break;
 			}
-			break;
+		}
 		case Press_Off:
-			A0 = PINA & 0x01;
-			if (A0) {
-                                LED_State = Press_Off;
+		{
+			if ((~PINA & 0x01) == 0x01) {
+                                state = Press_Off;
+				PORTB = 0x02;
+                                break;
                         }
-                        else if (!A0) {
-                                LED_State = Release_Off;
+                        else if ((~PINA & 0x01) == 0x00) {
+                                state = Release_Off;
+				PORTB = 0x02;
+                                break;
                         }
-			break;
+		}
 		case Release_Off:
-			A0 = PINA & 0x01;
-			if (!A0) {
-                                LED_State = Release_Off;
+		{	
+			if ((~PINA & 0x01) == 0x00) {
+                                state = Release_Off;
+				PORTB = 0x02;
+                                break;
                         }
-                        else if (A0) {
-                                LED_State = Press_On;
+                        else if ((~PINA & 0x01) == 0x01) {
+                                state = Press_On;
+				PORTB = 0x01;
+                                break;
                         }
-			break;
+		}
 		case Press_On:
-			A0 = PINA & 0x01;
-			if (A0) {
-                                LED_State = Press_On;
+		{	
+			if ((~PINA & 0x01) == 0x01) {
+                                state = Press_On;
+				PORTB = 0x01;
+                                break;
                         }
-                        else if (!A0) {
-                                LED_State = Release_On;
+                        else if ((~PINA & 0x01) == 0x00) {
+                                state = Release_On;
+				PORTB = 0x01;	
+                                break;
                         }
-			break;
+		}
 		default:
-			LED_State = Release_On;
+		{
+			state = Release_On;
 			break;
+		}
 	}
-	switch(LED_State) {
+	switch(state) {
                 case Release_On:
-			PORTB = 0x01;
+		{
                         break;
+		}
                 case Press_Off:
-			PORTB = 0x02;
+		{
                         break;
+		}
                 case Release_Off:
-			PORTB = 0x02;
+		{
                         break;
+		}
                 case Press_On:
-			PORTB = 0x01;
+		{
                         break;
+		}
         }
 }
 
 int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0xFF; PORTB = 0x00;
+	state = Release_On;
 //	unsigned char A0 = 0x00;
 	while(1) {
 //		A0 = PINA & 0x01;
