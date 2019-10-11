@@ -14,7 +14,8 @@
 
 enum LED_States {Press_On, Release_On, Press_Off, Release_Off} LED_State;
 
-void tick() {
+void tick(unsigned char A0) {
+	
 	switch(LED_State) {
 		case Release_On:
 			if (!A0) {
@@ -50,14 +51,14 @@ void tick() {
 			break;
 		default:
 			LED_State = Release_On;
-			break
+			break;
 	}
 	switch(LED_State) {
                 case Release_On:
 			PORTB = 0x01;
                         break;
                 case Press_Off:
-			PORtB = 0x02;
+			PORTB = 0x02;
                         break;
                 case Release_Off:
 			PORTB = 0x02;
@@ -74,7 +75,7 @@ int main(void) {
 	unsigned char A0 = 0x00;
 	while(1) {
 		A0 = PINA & 0x01;
-		tick();
+		tick(A0);
 	}
     return 1;
 }
