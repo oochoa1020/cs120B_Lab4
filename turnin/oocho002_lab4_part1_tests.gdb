@@ -31,7 +31,7 @@ test "PINA: 0x00 =>PORTB: 0x01”
 set state = Release_On
 setPINA 0x00
 continue 2
-expectPORTB 0x01
+expectPORTB 0x02
 checkResult
 
 test "PINA: 0x00,0x01 =>PORTB: 0x02”
