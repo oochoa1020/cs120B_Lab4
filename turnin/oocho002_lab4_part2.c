@@ -14,25 +14,24 @@
 //#define A0 PINA & 0x01
 
 enum states {wait, press0, press1, both} state;
-
+unsigned char tmpB = 0x07;
 void tick() {
-	unsigned char tmpB = 0x07;
 	switch(state) {
 		
 		case wait:
 		{
-			if ((~PINA & 0x03) == 0x00) {
+			if ((PINA & 0x03) == 0x00) {
 				PORTB = tmpB;
                                 state = wait;
                                 break;
                         }
-			else if ((~PINA & 0x03) == 0x03) {
+			else if ((PINA & 0x03) == 0x03) {
                                 state = both;
                                 tmpB = 0;
                                 PORTB = tmpB;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x01) {
+                        else if ((PINA & 0x03) == 0x01) {
                                 state = press0;
 				if (tmpB < 9) {
 					tmpB = tmpB + 1;
@@ -40,7 +39,7 @@ void tick() {
                                 PORTB = tmpB;
                                 break;
                         }
-			else if ((~PINA & 0x03) == 0x02) {
+			else if ((PINA & 0x03) == 0x02) {
                                 state = press1;
                                 if (tmpB > 0) {
                                         tmpB = tmpB - 1;
@@ -51,23 +50,22 @@ void tick() {
 		}
 		case press0:
 		{		
-			if ((~PINA & 0x03) == 0x00) {
-				PORTB = tmpB;
+			if ((PINA & 0x03) == 0x00) {
                                 state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x03) {
+                        else if ((PINA & 0x03) == 0x03) {
                                 state = both;
                                 tmpB = 0;
                                 PORTB = tmpB;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x01) {
+                        else if ((PINA & 0x03) == 0x01) {
 				PORTB = tmpB;
                                 state = press0;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x02) {
+                        else if ((PINA & 0x03) == 0x02) {
                                 state = press1;
                                 if (tmpB > 0) {
                                         tmpB = tmpB - 1;
@@ -78,18 +76,18 @@ void tick() {
 		}
 		case press1:
 		{	
-		        if ((~PINA & 0x03) == 0x00) {
+		        if ((PINA & 0x03) == 0x00) {
                                 PORTB = tmpB;
 				state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x03) {
+                        else if ((PINA & 0x03) == 0x03) {
                                 state = both;
                                 tmpB = 0;
                                 PORTB = tmpB;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x01) {
+                        else if ((PINA & 0x03) == 0x01) {
                                 state = press0;
                                 if (tmpB < 9) {
                                         tmpB = tmpB + 1;
@@ -97,7 +95,7 @@ void tick() {
                                 PORTB = tmpB;
                                 break;
                         }
-          		else if ((~PINA & 0x03) == 0x02) {
+          		else if ((PINA & 0x03) == 0x02) {
 				PORTB = tmpB;
                                 state = press1;
                                 break;
@@ -105,17 +103,17 @@ void tick() {
 		}
 		case both:
 		{	
-		        if ((~PINA & 0x03) == 0x00) {
+		        if ((PINA & 0x03) == 0x00) {
 				PORTB = tmpB;
                                 state = wait;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x03) {
+                        else if ((PINA & 0x03) == 0x03) {
 				PORTB = tmpB;
                                 state = both;
                                 break;
                         }
-                        else if ((~PINA & 0x03) == 0x01) {
+                        else if ((PINA & 0x03) == 0x01) {
                                 state = press0;
                                 if (tmpB < 9) {
                                         tmpB = tmpB + 1;
@@ -123,7 +121,7 @@ void tick() {
                                 PORTB = tmpB;
                                 break;
                         }
-          		else if ((~PINA & 0x03) == 0x02) {
+          		else if ((PINA & 0x03) == 0x02) {
                                 state = press1;
                                 if (tmpB > 0) {
                                         tmpB = tmpB - 1;

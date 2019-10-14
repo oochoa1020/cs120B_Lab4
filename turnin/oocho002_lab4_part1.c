@@ -19,25 +19,26 @@ void tick() {
 	switch(state) {
 		case Release_On:
 		{		
-			if ((~PINA & 0x01) == 0x00) {
+			if ((PINA & 0x01) == 0x00) {
 				state = Release_On;
 				PORTB = 0x01;
 				break;
 			}
-			else if ((~PINA & 0x01) == 0x01) {
+			else {
 				state = Press_Off;
 				PORTB = 0x02;
                                 break;
 			}
+			//state = Press_Off;
 		}
 		case Press_Off:
 		{
-			if ((~PINA & 0x01) == 0x01) {
+			if ((PINA & 0x01) == 0x01) {
                                 state = Press_Off;
 				PORTB = 0x02;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x00) {
+                        else if ((PINA & 0x01) == 0x00) {
                                 state = Release_Off;
 				PORTB = 0x02;
                                 break;
@@ -45,12 +46,12 @@ void tick() {
 		}
 		case Release_Off:
 		{	
-			if ((~PINA & 0x01) == 0x00) {
+			if ((PINA & 0x01) == 0x00) {
                                 state = Release_Off;
 				PORTB = 0x02;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x01) {
+                        else if ((PINA & 0x01) == 0x01) {
                                 state = Press_On;
 				PORTB = 0x01;
                                 break;
@@ -58,16 +59,16 @@ void tick() {
 		}
 		case Press_On:
 		{	
-			if ((~PINA & 0x01) == 0x01) {
+			if ((PINA & 0x01) == 0x01) {
                                 state = Press_On;
 				PORTB = 0x01;
                                 break;
                         }
-                        else if ((~PINA & 0x01) == 0x00) {
+                        else if ((PINA & 0x01) == 0x00) {
                                 state = Release_On;
 				PORTB = 0x01;	
                                 break;
-                        }
+                       }
 		}
 		default:
 		{
@@ -99,9 +100,7 @@ int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;
 	DDRB = 0xFF; PORTB = 0x00;
 	state = Release_On;
-//	unsigned char A0 = 0x00;
 	while(1) {
-//		A0 = PINA & 0x01;
 		tick();
 	}
     return 1;

@@ -34,13 +34,118 @@ continue 2
 expectPORTB 0x07
 checkResult
 
-test "PINA: 0x00, 0x01 =>PORTB: 0x07”
+test "PINA: 0x00, 0x01 =>PORTB: 0x08”
 set state = wait
 setPINA 0x00
 continue 2
 setPINA 0x01
 continue 2
-expect state 2
+expectPORTB 0x08
+expect state press0
+checkResult
+
+test "PINA: 0x00, 0x01, 0x01 =>PORTB: 0x08”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x01
+continue 2
+expectPORTB 0x08
+expect state press0
+checkResult
+
+test "PINA: 0x00, 0x01, 0x00, 0x01 =>PORTB: 0x09”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+expectPORTB 0x09
+expect state press0
+checkResult
+
+test "PINA: 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 =>PORTB: 0x09”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+expectPORTB 0x09
+expect state press0
+checkResult
+
+test "PINA: 0x00, 0x01, 0x00, 0x01, 0x00, 0x02=>PORTB: 0x08”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x02
+continue 2
+expectPORTB 0x08
+expect state press1
+checkResult
+
+test "PINA: 0x00, 0x01, 0x00, 0x01, 0x03=>PORTB: 0x00”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x03
+continue 2
+expectPORTB 0x00
+expect state both
+checkResult
+
+test "PINA: 0x00, 0x01, 0x00, 0x01, 0x03, 0x00, 0x02=>PORTB: 0x00”
+set state = wait
+set tmpB = 0x07
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x01
+continue 2
+setPINA 0x03
+continue 2
+setPINA 0x00
+continue 2
+setPINA 0x02
+continue 2
+expectPORTB 0x00
+expect state press1
 checkResult
 
 # Report on how many tests passed/tests ran
